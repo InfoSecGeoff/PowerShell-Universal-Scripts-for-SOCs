@@ -42,7 +42,7 @@
 
 .PARAMETER LogPath
     Full path for the log file.
-    Default: "%ProgramData%\SSLManagement\ssl-auto-renewal.log"
+    Default: "%ProgramData%\SSLManagement\ACMECertRenewer.log"
 
 .PARAMETER CreateScheduledTask
     Creates a Windows scheduled task for daily certificate monitoring.
@@ -57,17 +57,17 @@
     Default: $true (recommended for PowerShell Universal servers)
 
 .EXAMPLE
-    .\SSL-Auto-Renewal.ps1 -Domain "psu.contoso.com" -ContactEmail "admin@contoso.com" -CreateScheduledTask
+    .\ACMECertRenewer.ps1 -Domain "psu.contoso.com" -ContactEmail "admin@contoso.com" -CreateScheduledTask
     
     Creates a scheduled task for daily monitoring and renewal of SSL certificate for psu.contoso.com
 
 .EXAMPLE
-    .\SSL-Auto-Renewal.ps1 -Domain "test.contoso.com" -ACMEServer "LetsEncrypt-Staging" -ForceRenewal
+    .\ACMECertRenewer.ps1 -Domain "test.contoso.com" -ACMEServer "LetsEncrypt-Staging" -ForceRenewal
     
     Forces immediate renewal of certificate using Let's Encrypt staging environment
 
 .EXAMPLE
-    .\SSL-Auto-Renewal.ps1 -Domain "psu.contoso.com" -RenewalThresholdDays 14
+    .\ACMECertRenewer.ps1 -Domain "psu.contoso.com" -RenewalThresholdDays 14
     
     Checks certificate and renews if expiring within 14 days instead of default 7 days
 
@@ -99,7 +99,7 @@
     - SOC-friendly logging and error handling
     
     Troubleshooting:
-    - Check logs at %ProgramData%\SSLManagement\ssl-auto-renewal.log
+    - Check logs at %ProgramData%\SSLManagement\ACMECertRenewer.log
     - Ensure domain DNS points to server
     - Verify port 80 internet accessibility
     - Use -ForceRenewal for immediate testing
@@ -131,7 +131,7 @@ param(
     [int]$RenewalThresholdDays = 7,
     
     [Parameter()]
-    [string]$LogPath = "$env:ProgramData\SSLManagement\ssl-auto-renewal.log",
+    [string]$LogPath = "$env:ProgramData\SSLManagement\ACMECertRenewer.log",
     
     [Parameter()]
     [string]$WebRootPath = "$env:SystemDrive\inetpub\wwwroot",
@@ -451,7 +451,7 @@ function New-AutoRenewalTask {
     try {
         $ScriptPath = $MyInvocation.ScriptName
         if (-not $ScriptPath) {
-            $ScriptPath = "$env:ProgramData\SSLManagement\SSL-Auto-Renewal.ps1"
+            $ScriptPath = "$env:ProgramData\SSLManagement\ACMECertRenewer.ps1"
             Write-Log "Saving script to: $ScriptPath"
             
             # Ensure directory exists
